@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GHOSTING CORPORATION</title>
+  <meta name="description" content="Ghosting Corporation — international artist agency shaping the future of underground electronic music." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0C0C0C; --text:#F1F1F1; --muted:#B7B7B7; --pill-br:#9A9A9A; --panel-pad:28px; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;display:flex;flex-direction:column;transition:background .4s ease,color .4s ease}
+
+    .header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px var(--panel-pad)}
+    .brand-block{display:flex;flex-direction:column;gap:6px}
+    .brand{font-weight:400;font-size:44px;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;cursor:pointer}
+    .brand span{display:inline-block;transition:transform .25s ease}
+    .brand:hover span:nth-child(odd){transform:translateY(-2px)}
+    .brand:hover span:nth-child(even){transform:translateY(1px)}
+    .subnav{display:flex;gap:18px}
+    .subnav a{font-size:11px;line-height:1;text-transform:lowercase;letter-spacing:.8px;color:var(--text);text-decoration:none;border-bottom:1px solid transparent;opacity:.8;transition:opacity .2s ease,border-color .2s ease}
+    .subnav a:hover{opacity:1;border-color:var(--text)}
+
+    .right{display:flex;align-items:center;gap:18px}
+    .motto{font:12px/1.3 'IBM Plex Sans',sans-serif;color:var(--muted);text-transform:uppercase;text-align:right;letter-spacing:1.2px}
+    .btn{border:1px solid var(--pill-br);padding:8px 18px;border-radius:999px;background:transparent;font:12px/1 'IBM Plex Sans',sans-serif;text-transform:uppercase;color:var(--text);transition:.3s}
+    .btn:hover{background:var(--text);color:var(--bg)}
+
+    .hero{position:relative;min-height:calc(100vh - 84px);display:flex;align-items:flex-end;overflow:hidden}
+    .hero-inner{cursor:default;width:100%;padding:0 var(--panel-pad) 24px;animation:fadeUp 1.8s ease both;transition:transform .35s ease, opacity .35s ease}
+    .headline{width:100%;max-width:none;text-transform:uppercase;font-weight:300;font-size:28px;line-height:1.25;letter-spacing:1px;word-spacing:16px}
+    .headline .w{display:inline-block;opacity:0;transform:translateY(6px);animation:st .8s ease forwards;transition:transform .25s ease;will-change:transform}
+    .hero-inner.active .w:nth-child(odd){transform:translateY(-3px) !important}
+    .hero-inner.active .w:nth-child(even){transform:translateY(2px) !important}
+    @media (prefers-reduced-motion: reduce){.hero-inner.active .w{transform:none !important;transition:none !important}}
+
+    /* Panels (artists/label/contact) */
+    .panels{position:fixed;inset:0;pointer-events:none}
+    .panel{position:absolute;inset:0;display:none;padding:80px var(--panel-pad) var(--panel-pad);}    
+    .panel h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:18px;opacity:.7}
+    .panel .list{display:flex;flex-direction:column;gap:10px}
+    .panel .list a{font-size:24px;text-decoration:none;color:currentColor;opacity:.9;transition:transform .2s ease,opacity .2s ease;position:relative;display:inline-block;cursor:pointer}
+    .panel .list a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:50% 50%;transition:transform .25s ease,opacity .2s ease;opacity:.6}
+    .panel .list a:hover::after{transform:scaleX(1);opacity:1}
+
+    /* Invert scheme when any panel open */
+    body.panel-open{--bg:#F5F5F5; --text:#0C0C0C; --muted:#5E5E5E; --pill-br:#2A2A2A}
+    body.panel-open .hero-inner{transform:translateY(28px);opacity:0}
+    body.panel-open .panel{display:none;pointer-events:auto}
+    body.panel-open .panel:not([hidden]){display:block}
+    body.panel-open .panel .list a{animation:revealY .4s ease both}
+    body.panel-open .panel .list a:nth-child(1){animation-delay:.06s}
+    body.panel-open .panel .list a:nth-child(2){animation-delay:.12s}
+    body.panel-open .panel .list a:nth-child(3){animation-delay:.18s}
+    body.panel-open .panel .list a:nth-child(4){animation-delay:.24s}
+
+    .panel--artists{background:var(--bg);color:var(--text)}
+    .panel--label{background:var(--bg);color:var(--text)}
+    .panel--contact{background:var(--bg);color:var(--text)}
+
+    /* EPK overlay */
+    .epk{position:fixed;inset:0;background:var(--bg);color:var(--text);display:none;overflow:auto;padding:80px var(--panel-pad) var(--panel-pad)}
+    .epk.open{display:block}
+    .epk .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .epk .title{font-size:28px;text-transform:uppercase;letter-spacing:1px;text-align:center;margin:0 auto}
+    .epk .close{font-size:12px;text-transform:uppercase;border:1px solid var(--pill-br);padding:6px 10px;border-radius:999px;background:transparent;color:currentColor;cursor:pointer}
+    .epk section{margin:18px 0}
+    .epk h3{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;opacity:.7}
+    .epk .media{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:16px;align-items:start}
+    .epk .media .video{grid-column:1;grid-row:1}
+    .epk .media .photo{grid-column:2;grid-row:1}
+    .epk .media .player{grid-column:1;grid-row:2}
+    .epk .photo .ph{display:flex;align-items:center;justify-content:center;height:240px;border:1px solid var(--pill-br);opacity:.8}
+    .epk .photo .ph span{font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+    .epk a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;opacity:.9;transition:opacity .2s ease,border-color .2s ease}
+    .epk a:hover{opacity:1;border-color:currentColor}
+
+    @keyframes fadeUp {from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+    @keyframes st {to{opacity:1;transform:none}}
+    @keyframes revealY {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    @media (max-width:900px){
+      .brand{font-size:36px}
+      .headline{font-size:20px;word-spacing:10px}
+      .epk .media{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand-block">
+      <div class="brand" id="brand">GHOSTING CORPORATION</div>
+      <nav class="subnav">
+        <a href="#" data-route="artists">artists</a>
+        <a href="#" data-route="label">label</a>
+        <a href="#" data-route="contact">contact</a>
+      </nav>
+    </div>
+    <div class="right">
+      <div class="motto">BUILDING BRIDGES BETWEEN ARTISTS, CURATORS, AND CULTURE</div>
+      <a class="btn" href="#">COLLABORATE WITH US</a>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="h1">
+    <div class="hero-inner">
+      <h1 id="h1" class="headline">FOUNDED IN LATE 2024 IN BERLIN, WE ARE AN INTERNATIONAL ARTIST AGENCY, LABEL &amp; EVENT SERIES DEDICATED TO SHAPING THE FUTURE OF UNDERGROUND ELECTRONIC MUSIC. OUR MISSION IS TO EMPOWER ARTISTS TO REACH THEIR FULL CREATIVE POTENTIAL WHILE CONNECTING THEM WITH AUDIENCES AND COMMUNITIES WORLDWIDE. WE COLLABORATE WITH BOTH EMERGING AND ESTABLISHED TALENTS, PROVIDING GUIDANCE, STRATEGY, AND OPPORTUNITIES TO GROW THEIR IMPACT. BEYOND BOOKINGS, WE CRAFT EXPERIENCES THAT MERGE SOUND, PERFORMANCE, AND VISUAL IDENTITY. ROOTED IN CULTURE AND DRIVEN BY PASSION, WE WORK TO BUILD SUSTAINABLE CAREERS AND MEANINGFUL CONNECTIONS. MORE THAN FOLLOWING TRENDS, WE AIM TO CREATE LASTING MOMENTS THAT RESONATE.</h1>
+    </div>
+  </section>
+
+  <!-- Panels -->
+  <div class="panels" aria-live="polite">
+    <div class="panel panel--artists" id="panel-artists" hidden>
+      <a href="#" class="back" data-back>←</a>
+      <h2>Artists</h2>
+      <div class="list">
+        <a href="#" data-artist="david-meyer">David Meyer</a>
+        <a href="#" data-artist="ludviq">Ludviq</a>
+        <a href="#" data-artist="mike-sacchetti">Mike Sacchetti</a>
+        <a href="#" data-artist="silenzi">Silenzi</a>
+      </div>
+    </div>
+    <div class="panel panel--label" id="panel-label" hidden>
+      <a href="#" class="back" data-back>←</a>
+      <h2>Label</h2>
+      <div class="list">
+        <a href="#">Instagram</a>
+        <a href="#">Bandcamp</a>
+        <a href="#">SoundCloud</a>
+        
+      </div>
+    </div>
+    <div class="panel panel--contact" id="panel-contact" hidden>
+      <a href="#" class="back" data-back>←</a>
+      <h2>Contact</h2>
+      <div class="list">
+        <div>Address (placeholder): Oranienstrasse 10, 10999 Berlin</div>
+        <a href="mailto:booking@ghostingcorp.com?utm_source=site&utm_medium=epk&utm_campaign=contact">booking@ghostingcorp.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EPK overlay (placeholder data) -->
+  <article class="epk" id="epk" role="dialog" aria-modal="true" aria-labelledby="epk-title">
+    <div class="top">
+      <a href="#" class="back" id="epk-back">←</a>
+      <div class="title" id="epk-title">Artist Name — Tagline</div>
+      <button class="close" id="epk-close">Close</button>
+    </div>
+    <section class="media">
+      <div class="video">
+        <h3>Video</h3>
+        <div id="epk-video"><iframe width="100%" height="240" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+      </div>
+      <div class="photo">
+        <h3>Photo</h3>
+        <div class="ph"><span>Photo Placeholder</span></div>
+      </div>
+      <div class="player">
+        <h3>Player</h3>
+        <div id="epk-player"><iframe width="100%" height="240" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/91504634&color=%230c0c0c"></iframe></div>
+      </div>
+    </section>
+    <section>
+      <h3>Bio</h3>
+      <p id="epk-bio">Short bio placeholder — 100–120 words about the artist, influences, performances, and distinctive sound. Replace with real content later.</p>
+    </section>
+    <section>
+      <h3>Socials</h3>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:6px">
+        <li><a href="#">Instagram — placeholder</a></li>
+        <li><a href="#">SoundCloud — placeholder</a></li>
+        <li><a href="#">Resident Advisor — placeholder</a></li>
+      </ul>
+    </section>
+    <section>
+      <h3>Riders</h3>
+      <ul id="epk-riders">
+        <li><a href="#">Technical Rider (PDF)</a></li>
+        <li><a href="#">Hospitality Rider (PDF)</a></li>
+        <li>Key requirements placeholder 1</li>
+        <li>Key requirements placeholder 2</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Availability</h3>
+      <p id="epk-availability">Available: Jan — Berlin; Feb — Paris; Mar — Madrid (placeholder).</p>
+    </section>
+    <section>
+      <h3>Booking</h3>
+      <form action="https://formspree.io/f/your-id" method="POST">
+        <input type="hidden" name="utm_source" value="site" />
+        <input type="hidden" name="utm_medium" value="epk" />
+        <input type="hidden" name="utm_campaign" value="artist-inquiry" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px">
+          <input name="name" placeholder="Your name" required>
+          <input name="email" placeholder="Your email" type="email" required>
+          <input name="date" placeholder="Proposed date">
+          <input name="city" placeholder="City">
+          <textarea name="message" placeholder="Tell us about the event" style="grid-column:1/-1"></textarea>
+        </div>
+        <div style="margin-top:12px"><button class="close" type="submit">Send</button></div>
+      </form>
+    </section>
+    <footer style="margin-top:24px;opacity:.7;font-size:12px">© Ghosting Corporation — All rights reserved.</footer>
+  </article>
+
+  <script>
+    // Brand hover animation per letter with preserved SPACE between words
+    (function(){
+      const el = document.getElementById('brand');
+      if(!el) return;
+      const text = 'GHOSTING CORP. AGENCY';
+      el.textContent = '';
+      for(const ch of text){
+        if(ch === ' '){ el.appendChild(document.createTextNode(' ')); continue; }
+        const s = document.createElement('span');
+        s.textContent = ch;
+        el.appendChild(s);
+      }
+      // clicking brand returns home
+      el.addEventListener('click',(e)=>{ e.preventDefault(); document.body.classList.remove('panel-open'); document.querySelectorAll('.panel').forEach(p=>p.hidden=true); history.pushState({}, '', '/'); });
+    })();
+
+    // Word-level stagger for the bottom headline + hover activation
+    (function(){
+      const h = document.getElementById('h1');
+      const band = document.querySelector('.hero-inner');
+      if(!h || !band) return;
+      const words = h.textContent.trim().split(' ');
+      h.textContent = '';
+      words.forEach((w,i)=>{
+        const span = document.createElement('span');
+        span.className = 'w';
+        span.textContent = w;
+        span.style.animationDelay = (0.15 + i*0.03).toFixed(2)+'s';
+        h.appendChild(span);
+        if(i < words.length-1) h.appendChild(document.createTextNode(' '));
+      });
+      band.addEventListener('mouseenter',()=>band.classList.add('active'));
+      band.addEventListener('mouseleave',()=>band.classList.remove('active'));
+    })();
+
+    // Panels logic (Artists/Label/Contact) + color invert + history
+    (function(){
+      const body = document.body;
+      const subnav = document.querySelector('.subnav');
+      const panels = {
+        artists: document.getElementById('panel-artists'),
+        label: document.getElementById('panel-label'),
+        contact: document.getElementById('panel-contact'),
+      };
+      function openPanel(key){
+        body.classList.add('panel-open');
+        for(const k in panels){ panels[k].hidden = k!==key; }
+        history.pushState({panel:key}, '', `/${key}`);
+      }
+      function closePanel(){
+        body.classList.remove('panel-open');
+        for(const k in panels){ panels[k].hidden = true; }
+        history.pushState({}, '', '/');
+      }
+      subnav.addEventListener('click', (e)=>{
+        const a = e.target.closest('a[data-route]');
+        if(!a) return;
+        e.preventDefault();
+        const key = a.getAttribute('data-route');
+        openPanel(key);
+      });
+      window.addEventListener('popstate', (e)=>{
+        if(!e.state || !e.state.panel) closePanel(); else openPanel(e.state.panel);
+      });
+      document.querySelectorAll('[data-back]').forEach(el=>{ el.addEventListener('click',(ev)=>{ ev.preventDefault(); closePanel(); }); });
+    })();
+
+    // EPK overlay wiring (placeholder content)
+    ;(function(){
+      const epk = document.getElementById('epk');
+      const closeBtn = document.getElementById('epk-close');
+      const epkBack = document.getElementById('epk-back');
+      const list = document.getElementById('panel-artists');
+      const title = document.getElementById('epk-title');
+      const bio = document.getElementById('epk-bio');
+      const availability = document.getElementById('epk-availability');
+      const riders = document.getElementById('epk-riders');
+
+      const data = {
+        'david-meyer': {
+          name: 'David Meyer', tagline: 'EBM / Electro — Live',
+          bio: 'David Meyer placeholder bio — 100 words.',
+          availability: 'Jan — Berlin; Feb — Paris; Mar — Barcelona',
+          riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','2x XLR outs','Stage table 120cm','Monitors L/R']
+        },
+        'ludviq': {
+          name: 'Ludviq', tagline: 'Italo / House — DJ',
+          bio: 'Ludviq placeholder bio — 100 words.',
+          availability: 'Feb — Milan; Mar — Lisbon; Apr — Berlin',
+          riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','USB sticks','Mixer 900NXS2','Monitors']
+        },
+        'mike-sacchetti': {
+          name: 'Mike Sacchetti', tagline: 'Wave / Techno — Hybrid',
+          bio: 'Mike Sacchetti placeholder bio — 100 words.',
+          availability: 'Mar — Paris; Apr — Brussels; May — Berlin',
+          riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','DI box','Power 220V','Soundcheck 60min']
+        },
+        'silenzi': {
+          name: 'Silenzi', tagline: 'Ambient / IDM — Live A/V',
+          bio: 'Silenzi placeholder bio — 100 words.',
+          availability: 'Jan — Rome; Feb — Vienna; Mar — Prague',
+          riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','Projector 5k','Dark stage','2x DI']
+        }
+      };
+
+      function closeEpk(){ epk.classList.remove('open'); history.back(); }
+
+      list.addEventListener('click',(e)=>{
+        const a = e.target.closest('a[data-artist]');
+        if(!a) return;
+        e.preventDefault();
+        const key = a.getAttribute('data-artist');
+        const d = data[key];
+        if(!d) return;
+        title.textContent = `${d.name} — ${d.tagline}`;
+        bio.textContent = d.bio;
+        availability.textContent = `Available: ${d.availability}`;
+        riders.innerHTML = '';
+        d.riders.forEach((r,i)=>{
+          const li = document.createElement('li');
+          if(i<2){ const link = document.createElement('a'); link.href='#'; link.textContent=r; li.appendChild(link); }
+          else { li.textContent = r; }
+          riders.appendChild(li);
+        });
+        epk.classList.add('open');
+        history.pushState({artist:key}, '', `/artists/${key}`);
+      });
+      closeBtn.addEventListener('click', closeEpk);
+      epkBack.addEventListener('click',(e)=>{ e.preventDefault(); closeEpk(); });
+      window.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeEpk(); });
+      window.addEventListener('popstate',(e)=>{ if(!e.state || (!e.state.artist && !e.state.panel)) epk.classList.remove('open'); });
+    })();
+  </script>
+</body>
+</html>
