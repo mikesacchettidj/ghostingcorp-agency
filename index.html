@@ -24,6 +24,11 @@
     .subnav a{font-size:11px;line-height:1;text-transform:lowercase;letter-spacing:.8px;color:var(--text);text-decoration:none;border-bottom:1px solid transparent;opacity:.8;transition:opacity .2s ease,border-color .2s ease}
     .subnav a:hover{opacity:1;border-color:var(--text)}
 
+    /* Back arrow link — typographic, subtle motion */
+    .back{color:currentColor;text-decoration:none;display:inline-block;font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.75;border-bottom:1px solid transparent;transform:translateX(0);transition:opacity .2s ease, border-color .2s ease, transform .25s ease}
+    .back:hover{opacity:1;border-color:currentColor;transform:translateX(-3px)}
+    .back:focus-visible{outline:1px dotted currentColor;outline-offset:3px}
+
     .right{display:flex;align-items:center;gap:18px}
     .motto{font:12px/1.3 'IBM Plex Sans',sans-serif;color:var(--muted);text-transform:uppercase;text-align:right;letter-spacing:1.2px}
     .btn{border:1px solid var(--pill-br);padding:8px 18px;border-radius:999px;background:transparent;font:12px/1 'IBM Plex Sans',sans-serif;text-transform:uppercase;color:var(--text);transition:.3s}
