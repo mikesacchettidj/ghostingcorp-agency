@@ -80,6 +80,14 @@
     .epk .media .player{grid-column:1;grid-row:2}
     .epk .photo .ph{display:flex;align-items:center;justify-content:center;height:240px;border:1px solid var(--pill-br);opacity:.8}
     .epk .photo .ph span{font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+        /* EPK photo image */
+    .epk .photo img{
+      display:block;
+      width:100%;
+      height:240px;
+      object-fit:cover;
+      border:1px solid var(--pill-br);
+    }
     .epk a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;opacity:.9;transition:opacity .2s ease,border-color .2s ease}
     .epk a:hover{opacity:1;border-color:currentColor}
 
@@ -305,12 +313,29 @@
           availability: 'Feb — Milan; Mar — Lisbon; Apr — Berlin',
           riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','USB sticks','Mixer 900NXS2','Monitors']
         },
-        'mike-sacchetti': {
-          name: 'Mike Sacchetti', tagline: 'Wave / Techno — Hybrid',
-          bio: 'Mike Sacchetti placeholder bio — 100 words.',
-          availability: 'Mar — Paris; Apr — Brussels; May — Berlin',
-          riders: ['Technical Rider (PDF)','Hospitality Rider (PDF)','DI box','Power 220V','Soundcheck 60min']
+         'mike-sacchetti': {
+          name: 'Mike Sacchetti',
+          tagline: 'Wave / Techno — Hybrid',
+          bio: "MIKE´S A NOMAD, A MUSIC PRODUCER, MULTI INSTRUMENTALIST AND DJ. HIS MUSIC OFTEN FUSES COMPONENTS OF WAVY MELANCHOLIC SOUNDS, ARPEGGIATED SYNTHS BASSLINES AND POWERFUL DRUMS BEATS FROM DISCO TO ELECTRO. YOU COULD SAY IT´S DIFFICULT TO NARROW HIS STYLE TO JUST THESE ELEMENTS AS HE CAN NAVIGATE THROUGH DIFFERENT MOODS AND GENRES, DEPENDING ON HIS SOURCE OF INSPIRATION. AS A DJ HE HAS PERFORMED ALONGSIDE WELL KNOWN NAMES IN THE ELECTRONIC MUSIC COMMUNITY, SHARING LINEUP WITH ARTISTS LIKE: JENNIFER CARDINI, FRANZ SCALA, CURSES, MANFREDAS, PEREL, OPTIMO, TERR, LAKUTI, DAM SWINDLE, DAVID VUNK, DANIEL MONACO, LOCAL SUICIDE, BUDINO, MASSIMILIANO PAGLIARA, INCLUDING INTERNATIONAL EXPERIENCE COUNTRIES LIKE SPAIN, NETHERLANDS, FRANCE, SWITZERLAND, AUSTRIA. YOU CAN NOWADAYS BASED IN BERLIN, REGULAR GUEST AT THE MOST KNOWN CLUBS IN THE CITY (SISYPHOS, KATER BLAU, RENATE, ETC).",
+          availability: 'Jan — Berlin; Feb — Paris; Mar — Madrid',
+          riders: [
+            'Technical Rider (PDF)',
+            'Hospitality Rider (PDF)',
+            '3x PIONEER CDJS 3000',
+            'Pioneer DJ DJM-A9 / DJM-900NXS2 / E&S DJR-400',
+            '2 BOOTH MONITORS L/R'
+          ],
+          // NUEVO: media + socials
+          video: 'https://www.youtube.com/embed/4ODZzhwj_LM',
+          playerIframe: '<iframe width="100%" height="300" scrolling="no" frameborder="0" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2039965386&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>',
+          photo: 'assets/img/mike-sacchetti.jpg', // pon la foto aquí en tu repo
+          socials: {
+            instagram: 'https://www.instagram.com/mikesacchetti/',
+            soundcloud: 'https://soundcloud.com/mikesacchettidj',
+            ra: 'https://ra.co/dj/mikesacchetti'
+          }
         },
+
         'silenzi': {
           name: 'Silenzi', tagline: 'Ambient / IDM — Live A/V',
           bio: 'Silenzi placeholder bio — 100 words.',
@@ -338,6 +363,34 @@
           else { li.textContent = r; }
           riders.appendChild(li);
         });
+
+        // ---- NUEVO: media (video, player, photo) por artista ----
+          try{
+            if (d.video) {
+              document.getElementById('epk-video').innerHTML =
+                `<iframe width="100%" height="240" src="${d.video}"
+                   title="Video" frameborder="0"
+                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                   allowfullscreen></iframe>`;
+            }
+            if (d.playerIframe) {
+              document.getElementById('epk-player').innerHTML = d.playerIframe;
+            }
+            if (d.photo) {
+              const photoBlock = document.querySelector('.epk .photo');
+              photoBlock.innerHTML = `<h3>Photo</h3><img src="${d.photo}" alt="${d.name}">`;
+            }
+            // ---- NUEVO: socials por artista ----
+            if (d.socials) {
+              const socialsUl = document.querySelector('.epk section:nth-of-type(3) ul'); // la lista de Socials
+              socialsUl.innerHTML = `
+                <li><a href="${d.socials.instagram}" target="_blank" rel="noopener">Instagram</a></li>
+                <li><a href="${d.socials.soundcloud}" target="_blank" rel="noopener">SoundCloud</a></li>
+                <li><a href="${d.socials.ra}" target="_blank" rel="noopener">Resident Advisor</a></li>
+              `;
+            }
+          } catch(_e){ /* noop, evita romper UI si falta algún campo */ }
+
         epk.classList.add('open');
         history.pushState({artist:key}, '', `/artists/${key}`);
       });
