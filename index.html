@@ -373,7 +373,7 @@
         const d = data[key];
         if(!d) return;
         title.textContent = `${d.name} — ${d.tagline}`;
-        bio.textContent = d.bio;
+        bio.innerHTML = d.bio;
         availability.textContent = `Available: ${d.availability}`;
         riders.innerHTML = '';
         d.riders.forEach((r,i)=>{
