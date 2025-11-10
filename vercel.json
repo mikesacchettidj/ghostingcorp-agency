@@ -1,5 +1,5 @@
 {
-  "redirects": [
-    { "source": "/artists/:path*", "destination": "/", "permanent": false }
+  "rewrites": [
+    { "source": "/artists/:path*", "destination": "/" }
   ]
 }
