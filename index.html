@@ -34,6 +34,8 @@
     .subnav a:hover{opacity:1;border-color:var(--text)}
      body.panel-open .subnav,
      body.epk-open .subnav{ display:none; }
+     body.epk-open .hero-inner{opacity:0; transform:translateY(28px);}
+  
 
 
     /* Back arrow link */
@@ -105,7 +107,7 @@
     .panel--contact{background:var(--bg);color:var(--text)}
 
     /* EPK overlay */
-    .epk{position:fixed;inset:0;background:var(--bg);color:var(--text);display:none;overflow:auto;padding:80px var(--panel-pad) var(--panel-pad)}
+    .epk{position:fixed;inset:0;background:var(--bg);color:var(--text);display:none;overflow:auto;padding:80px var(--panel-pad) var(--panel-pad);z-index:1000}
     .epk.open{display:block}
     .epk .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
     .epk .title{font-size:28px;text-transform:uppercase;letter-spacing:1px;text-align:center;margin:0 auto}
@@ -514,6 +516,39 @@
         }
       });
     })();
-  </script>
+    <script>
+  // --- Route bootstrap: abre panel/EPK según la URL al cargar ---
+  (function(){
+    var path = location.pathname || '/';
+    // abre EPK si URL es /artists/slug
+    var m = path.match(/^\/artists\/([\w-]+)\/?$/);
+    if(m){
+      // espera a que el EPK esté cableado
+      window.addEventListener('load', function(){
+        try{
+          // dispara el mismo flujo de click que ya tienes
+          var key = m[1];
+          // simula un click en la lista si existe; si no, llama openEpk si está en scope
+          var link = document.querySelector('[data-artist="'+key+'"]');
+          if(link && link.hasAttribute('data-ready')){
+            link.dispatchEvent(new Event('click', {bubbles:true}));
+          }else{
+            // fallback: intenta llamar a openEpk si quedó en cierre
+            if (typeof openEpk === 'function') openEpk(key);
+          }
+        }catch(_e){}
+      });
+      return;
+    }
+    // abre panel si URL es /artists /label /contact
+    var p = path.match(/^\/(artists|label|contact)\/?$/);
+    if(p){
+      window.addEventListener('load', function(){
+        var a = document.querySelector('.subnav a[data-route="'+p[1]+'"]');
+        if(a) a.click();
+      });
+    }
+  })();
+</script>
 </body>
 </html>
