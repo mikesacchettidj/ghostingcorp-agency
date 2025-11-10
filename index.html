@@ -19,6 +19,9 @@
     }
     /* Lock scroll en home (sin panel ni EPK) */
     body:not(.panel-open):not(.epk-open){overflow:hidden}
+    @media (min-width:901px){
+    body:not(.panel-open):not(.epk-open){overflow:hidden;}
+    }
 
     .header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px var(--panel-pad)}
     .brand-block{display:flex;flex-direction:column;gap:6px}
@@ -127,18 +130,27 @@
     @keyframes revealY {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
     @media (max-width:900px){
-    .brand{font-size:36px}
-    .headline{font-size:20px;word-spacing:10px}
+  .brand{font-size:36px}
+  .headline{font-size:18px; word-spacing:8px; line-height:1.2;} /* evita corte de letras */
 
-  /* Hero sin recorte lateral */
-    .hero{overflow:visible;}
+  /* Hero: altura real de pantalla iOS + aire arriba/abajo */
+  .hero{ 
+    overflow:visible; 
+    min-height:calc(100vh - 140px);
+  }
+  @supports (height: 100svh){
+    .hero{ min-height:calc(100svh - 140px); }
+  }
+  .hero-inner{
+    padding:8px var(--panel-pad) calc(28px + env(safe-area-inset-bottom));
+  }
 
   /* EPK sin recorte ni deformaciones */
-    .epk .media{grid-template-columns:1fr;}
-    .epk .photo .ph{height:auto;}
-    .epk .photo img{width:100%;height:auto;}
-    .epk .media iframe{max-width:100%;}
-  }
+  .epk .media{grid-template-columns:1fr;}
+  .epk .photo .ph{height:auto;}
+  .epk .photo img{width:100%;height:auto;}
+  .epk .media iframe{max-width:100%;}
+}
 
   </style>
 </head>
