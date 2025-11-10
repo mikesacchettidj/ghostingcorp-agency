@@ -23,7 +23,7 @@
     body:not(.panel-open):not(.epk-open){overflow:hidden;}
     }
 
-    .header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px var(--panel-pad)}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px var(--panel-pad);position:relative;z-index:10}
     .brand-block{display:flex;flex-direction:column;gap:6px}
     .brand{font-weight:400;font-size:44px;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;cursor:pointer}
     .brand span{display:inline-block;transition:transform .25s ease}
@@ -44,13 +44,21 @@
     .btn:hover{background:var(--text);color:var(--bg)}
 
     .hero{
-      position:relative;min-height:calc(100dvh - 104px); /* 100dvh para evitar mini-scroll en 13\" y móvil */
-      @supports (height: 100svh){
-    .hero{ min-height:calc(100svh - 104px); }
+    position:relative;
+    min-height:calc(100vh - 104px); /* base desktop + móvil */
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+    z-index:1; /* evita que tape el header */
     }
 
-      display:flex;align-items:flex-end;overflow:hidden
+/* soporte iOS moderno: usa altura real del viewport sin barra */
+    @supports (height: 100svh){
+    .hero{
+    min-height:calc(100svh - 104px);
     }
+  }
+
     .hero-inner{
       cursor:default;width:100%;padding:0 var(--panel-pad) 28px; /* -8px para encajar sin scroll */
       padding-bottom: calc(28px + env(safe-area-inset-bottom));
@@ -63,7 +71,8 @@
     @media (prefers-reduced-motion: reduce){.hero-inner.active .w{transform:none !important;transition:none !important}}
 
     /* Panels (artists/label/contact) */
-    .panels{position:fixed;inset:0;pointer-events:none}
+    .panels{position:fixed;inset:0;pointer-events:none;z-index:5}
+     body.panel-open .panels{pointer-events:auto;}
     .panel{position:absolute;inset:0;display:none;padding:80px var(--panel-pad) var(--panel-pad);}    
     .panel h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:18px;opacity:.7}
     .panel .list{display:flex;flex-direction:column;gap:10px}
@@ -166,7 +175,7 @@
     </div>
     <div class="right">
       <div class="motto">BUILDING BRIDGES BETWEEN ARTISTS, CURATORS, AND CULTURE</div>
-      <a class="btn" href="mailto:booking@ghostingcorp.com?subject=Collaboration%20Inquiry&body=Hi%20Ghosting%20Corp,%20I%E2%80%99d%20like%20to%20collaborate...">COLLABORATE WITH US</a>
+      <a class="btn" href="mailto:hey@ghostingcorp-agency.com?subject=Collaboration%20Inquiry&body=Hi%20Ghosting%20Corp,%20I%E2%80%99d%20like%20to%20collaborate...">COLLABORATE WITH US</a>
     </div>
   </header>
 
@@ -204,8 +213,8 @@
       <a href="#" class="back" data-back>←</a>
       <h2>Contact</h2>
       <div class="list">
-        <div>Address (placeholder): Oranienstrasse 10, 10999 Berlin</div>
-        <a href="mailto:booking@ghostingcorp.com?utm_source=site&utm_medium=epk&utm_campaign=contact">booking@ghostingcorp.com</a>
+        <div>Address: Ebertystrasse, 4. 10249 Berlin</div>
+        <a href="mailto:hey@ghostingcorp-agency.com?utm_source=site&utm_medium=epk&utm_campaign=contact">hey@ghostingcorp-agency.com</a>
       </div>
     </div>
   </div>
