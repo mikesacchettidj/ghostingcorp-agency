@@ -32,6 +32,9 @@
     .subnav{display:flex;gap:18px}
     .subnav a{font-size:11px;line-height:1;text-transform:lowercase;letter-spacing:.8px;color:var(--text);text-decoration:none;border-bottom:1px solid transparent;opacity:.8;transition:opacity .2s ease,border-color .2s ease}
     .subnav a:hover{opacity:1;border-color:var(--text)}
+     body.panel-open .subnav,
+     body.epk-open .subnav{ display:none; }
+
 
     /* Back arrow link */
     .back{color:currentColor;text-decoration:none;display:inline-block;font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.75;border-bottom:1px solid transparent;transform:translateX(0);transition:opacity .2s ease, border-color .2s ease, transform .25s ease}
@@ -71,7 +74,7 @@
     @media (prefers-reduced-motion: reduce){.hero-inner.active .w{transform:none !important;transition:none !important}}
 
     /* Panels (artists/label/contact) */
-    .panels{position:fixed;inset:0;pointer-events:none;z-index:5}
+    .panels{position:fixed;inset:0;pointer-events:none;z-index:999}
      body.panel-open .panels{pointer-events:auto;}
     .panel{position:absolute;inset:0;display:none;padding:80px var(--panel-pad) var(--panel-pad);}    
     .panel h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:18px;opacity:.7}
@@ -140,21 +143,19 @@
 
     @media (max-width:900px){
   .brand{font-size:36px}
-  .headline{font-size:18px; word-spacing:8px; line-height:1.2;} /* evita corte de letras */
+  .headline{font-size:18px; word-spacing:6px; line-height:1.22;}
 
-  /* Hero: altura real de pantalla iOS + aire arriba/abajo */
-  .hero{ 
-    overflow:visible; 
-    min-height:calc(100vh - 140px);
-  }
-  @supports (height: 100svh){
-    .hero{ min-height:calc(100svh - 140px); }
+  /* El hero en móvil no fuerza altura fija y deja aire */
+  .hero{
+    overflow:visible;
+    min-height:auto;           /* quita el calc en móvil */
+    padding-top:56px;          /* despega del header */
   }
   .hero-inner{
-    padding:8px var(--panel-pad) calc(28px + env(safe-area-inset-bottom));
+    padding:0 var(--panel-pad) 32px; /* aire abajo para que no “corte” */
   }
 
-  /* EPK sin recorte ni deformaciones */
+  /* EPK sin recortes */
   .epk .media{grid-template-columns:1fr;}
   .epk .photo .ph{height:auto;}
   .epk .photo img{width:100%;height:auto;}
