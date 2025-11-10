@@ -516,39 +516,39 @@
         }
       });
     })();
-    <script>
+   
   // --- Route bootstrap: abre panel/EPK según la URL al cargar ---
-  (function(){
-    var path = location.pathname || '/';
-    // abre EPK si URL es /artists/slug
-    var m = path.match(/^\/artists\/([\w-]+)\/?$/);
-    if(m){
-      // espera a que el EPK esté cableado
-      window.addEventListener('load', function(){
-        try{
-          // dispara el mismo flujo de click que ya tienes
-          var key = m[1];
-          // simula un click en la lista si existe; si no, llama openEpk si está en scope
-          var link = document.querySelector('[data-artist="'+key+'"]');
-          if(link && link.hasAttribute('data-ready')){
-            link.dispatchEvent(new Event('click', {bubbles:true}));
-          }else{
-            // fallback: intenta llamar a openEpk si quedó en cierre
-            if (typeof openEpk === 'function') openEpk(key);
-          }
-        }catch(_e){}
-      });
-      return;
-    }
-    // abre panel si URL es /artists /label /contact
-    var p = path.match(/^\/(artists|label|contact)\/?$/);
-    if(p){
-      window.addEventListener('load', function(){
-        var a = document.querySelector('.subnav a[data-route="'+p[1]+'"]');
-        if(a) a.click();
-      });
-    }
-  })();
+(function(){
+  var path = location.pathname || '/';
+
+  // si llega /artists/slug → abre panel Artists y luego el EPK
+  var m = path.match(/^\/artists\/([\w-]+)\/?$/);
+  if(m){
+    var slug = m[1];
+    window.addEventListener('load', function(){
+      // 1) abre el panel de Artists (usa tu mismo flujo de navegación)
+      var navArtists = document.querySelector('.subnav a[data-route="artists"]');
+      if(navArtists) navArtists.click();
+
+      // 2) tras un tick, simula click en el artista listo
+      setTimeout(function(){
+        var link = document.querySelector('[data-artist="'+slug+'"][data-ready]');
+        if(link){ link.click(); }
+      }, 60);
+    });
+    return;
+  }
+
+  // si llega /artists o /label o /contact → abre ese panel
+  var p = path.match(/^\/(artists|label|contact)\/?$/);
+  if(p){
+    window.addEventListener('load', function(){
+      var a = document.querySelector('.subnav a[data-route="'+p[1]+'"]');
+      if(a) a.click();
+    });
+  }
+})();
+
 </script>
 </body>
 </html>
