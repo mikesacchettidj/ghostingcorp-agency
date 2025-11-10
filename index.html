@@ -142,26 +142,31 @@
     @keyframes revealY {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
     @media (max-width:900px){
-  .brand{font-size:36px}
-  .headline{font-size:18px; word-spacing:6px; line-height:1.22;}
+  /* HEADER: que quepa todo y no se solape */
+  .header{flex-wrap:wrap; gap:8px; align-items:flex-start;}
+  .brand{font-size:30px; white-space:normal; line-height:1.1;} /* antes: 36px + nowrap */
+  .subnav{margin-top:4px;}
+  .right{width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px;}
+  .motto{font-size:11px; max-width:70%;}
+  .btn{padding:8px 12px;}
 
-  /* El hero en móvil no fuerza altura fija y deja aire */
+  /* HERO: sin cortes ni solapes con header */
+  .headline{font-size:18px; word-spacing:6px; line-height:1.22;}
   .hero{
     overflow:visible;
-    min-height:auto;           /* quita el calc en móvil */
-    padding-top:56px;          /* despega del header */
+    min-height:auto;        /* quita el calc en móvil */
+    padding-top:64px;       /* aire bajo el header (sube desde 56 a 64) */
   }
   .hero-inner{
-    padding:0 var(--panel-pad) 32px; /* aire abajo para que no “corte” */
+    padding:0 var(--panel-pad) calc(36px + env(safe-area-inset-bottom)); /* +4px de aire abajo */
   }
 
-  /* EPK sin recortes */
+  /* EPK: sin recortes */
   .epk .media{grid-template-columns:1fr;}
   .epk .photo .ph{height:auto;}
-  .epk .photo img{width:100%;height:auto;}
+  .epk .photo img{width:100%; height:auto;}
   .epk .media iframe{max-width:100%;}
 }
-
   </style>
 </head>
 <body>
@@ -182,7 +187,7 @@
 
   <section class="hero" aria-labelledby="h1">
     <div class="hero-inner">
-      <h1 id="h1" class="headline">FOUNDED IN LATE 2024 IN BERLIN, WE ARE AN INTERNATIONAL ARTIST AGENCY, LABEL &amp; EVENT SERIES DEDICATED TO SHAPING THE FUTURE OF UNDERGROUND ELECTRONIC MUSIC. OUR MISSION IS TO EMPOWER ARTISTS TO REACH THEIR FULL CREATIVE POTENTIAL WHILE CONNECTING THEM WITH AUDIENCES AND COMMUNITIES WORLDWIDE. WE COLLABORATE WITH BOTH EMERGING AND ESTABLISHED TALENTS, PROVIDING GUIDANCE, STRATEGY, AND OPPORTUNITIES TO GROW THEIR IMPACT. BEYOND BOOKINGS, WE CRAFT EXPERIENCES THAT MERGE SOUND, PERFORMANCE, AND VISUAL IDENTITY. ROOTED IN CULTURE AND DRIVEN BY PASSION, WE WORK TO BUILD SUSTAINABLE CAREERS AND MEANINGFUL CONNECTIONS. MORE THAN FOLLOWING TRENDS, WE AIM TO CREATE LASTING MOMENTS THAT RESONATE.</h1>
+      <h1 id="h1" class="headline">FOUNDED IN LATE 2024 IN BERLIN, WE ARE AN INTERNATIONAL ARTIST AGENCY, LABEL &amp; EVENT SERIES COMMITED TO SHAPING THE FUTURE OF UNDERGROUND ELECTRONIC MUSIC. OUR MISSION IS TO EMPOWER ARTISTS TO REACH THEIR FULL CREATIVE POTENTIAL WHILE CONNECTING THEM WITH AUDIENCES AND COMMUNITIES WORLDWIDE. WE COLLABORATE WITH BOTH EMERGING AND ESTABLISHED TALENTS, PROVIDING GUIDANCE, STRATEGY, AND OPPORTUNITIES TO GROW THEIR IMPACT. BEYOND BOOKINGS, WE CRAFT EXPERIENCES THAT MERGE SOUND, PERFORMANCE, AND VISUAL IDENTITY. ROOTED IN CULTURE AND DRIVEN BY PASSION, WE WORK TO BUILD SUSTAINABLE CAREERS AND MEANINGFUL CONNECTIONS. MORE THAN FOLLOWING TRENDS, WE AIM TO CREATE LASTING MOMENTS THAT RESONATE.</h1>
     </div>
   </section>
 
