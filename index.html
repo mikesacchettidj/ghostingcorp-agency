@@ -17,10 +17,10 @@
       background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;
       display:flex;flex-direction:column;transition:background .4s ease,color .4s ease
     }
-    /* Lock scroll en home (sin panel ni EPK) */
+    /* Lock scroll en home (desktop) */
     body:not(.panel-open):not(.epk-open){overflow:hidden}
     @media (min-width:901px){
-    body:not(.panel-open):not(.epk-open){overflow:hidden;}
+      body:not(.panel-open):not(.epk-open){overflow:hidden;}
     }
 
     .header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px var(--panel-pad);position:relative;z-index:10}
@@ -32,13 +32,10 @@
     .subnav{display:flex;gap:18px}
     .subnav a{font-size:11px;line-height:1;text-transform:lowercase;letter-spacing:.8px;color:var(--text);text-decoration:none;border-bottom:1px solid transparent;opacity:.8;transition:opacity .2s ease,border-color .2s ease}
     .subnav a:hover{opacity:1;border-color:var(--text)}
-     body.panel-open .subnav,
-     body.epk-open .subnav{ display:none; }
-     body.epk-open .hero-inner{opacity:0; transform:translateY(28px);}
-  
+    body.panel-open .subnav,
+    body.epk-open .subnav{ display:none; }
+    body.epk-open .hero-inner{opacity:0; transform:translateY(28px);}
 
-
-    /* Back arrow link */
     .back{color:currentColor;text-decoration:none;display:inline-block;font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.75;border-bottom:1px solid transparent;transform:translateX(0);transition:opacity .2s ease, border-color .2s ease, transform .25s ease}
     .back:hover{opacity:1;border-color:currentColor;transform:translateX(-3px)}
     .back:focus-visible{outline:1px dotted currentColor;outline-offset:3px}
@@ -49,23 +46,19 @@
     .btn:hover{background:var(--text);color:var(--bg)}
 
     .hero{
-    position:relative;
-    min-height:calc(100vh - 104px); /* base desktop + móvil */
-    display:flex;
-    align-items:flex-end;
-    overflow:hidden;
-    z-index:1; /* evita que tape el header */
+      position:relative;
+      min-height:calc(100vh - 104px);
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      z-index:1;
     }
-
-/* soporte iOS moderno: usa altura real del viewport sin barra */
     @supports (height: 100svh){
-    .hero{
-    min-height:calc(100svh - 104px);
+      .hero{ min-height:calc(100svh - 104px); }
     }
-  }
 
     .hero-inner{
-      cursor:default;width:100%;padding:0 var(--panel-pad) 28px; /* -8px para encajar sin scroll */
+      cursor:default;width:100%;padding:0 var(--panel-pad) 28px;
       padding-bottom: calc(28px + env(safe-area-inset-bottom));
       animation:fadeUp 1.8s ease both;transition:transform .35s ease, opacity .35s ease
     }
@@ -75,20 +68,17 @@
     .hero-inner.active .w:nth-child(even){transform:translateY(2px) !important}
     @media (prefers-reduced-motion: reduce){.hero-inner.active .w{transform:none !important;transition:none !important}}
 
-    /* Panels (artists/label/contact) */
+    /* Panels */
     .panels{position:fixed;inset:0;pointer-events:none;z-index:999}
-     body.panel-open .panels{pointer-events:auto;}
+    body.panel-open .panels{pointer-events:auto;}
     .panel{position:absolute;inset:0;display:none;padding:80px var(--panel-pad) var(--panel-pad);}    
     .panel h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:18px;opacity:.7}
     .panel .list{display:flex;flex-direction:column;gap:10px}
     .panel .list a{font-size:24px;text-decoration:none;color:currentColor;opacity:.9;transition:transform .2s ease,opacity .2s ease;position:relative;display:inline-block;cursor:pointer}
     .panel .list a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:50% 50%;transition:transform .25s ease,opacity .2s ease;opacity:.6}
     .panel .list a:hover::after{transform:scaleX(1);opacity:1}
-    /* Deshabilitados (A): cursor y opacidad sutil; mantiene hover subrayado visual si pasas, pero no navega */
     .panel .list a[aria-disabled="true"]{cursor:default;opacity:.7}
     .panel .list a[aria-disabled="true"]:hover::after{transform:none;opacity:.4}
-
-    /* Nota pequeña al final (More to be announced) */
     .soon-note{margin-top:8px;font-size:12px;opacity:.6;letter-spacing:.2px}
 
     /* Invert scheme when any panel open */
@@ -122,15 +112,10 @@
     .epk .media .player{grid-column:1;grid-row:2}
     .epk .photo .ph{position:relative;overflow:hidden;height:240px;border:1px solid var(--pill-br);border-radius:6px}
     .epk .photo .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-
-    /* EPK photo image */
-    .epk .photo img{
-      display:block;width:100%;height:240px;object-fit:cover;border:1px solid var(--pill-br);
-    }
+    .epk .photo img{display:block;width:100%;height:240px;object-fit:cover;border:1px solid var(--pill-br);}
     .epk a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;opacity:.9;transition:opacity .2s ease,border-color .2s ease}
     .epk a:hover{opacity:1;border-color:currentColor}
 
-    /* Toast (B) */
     .toast{
       position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
       background:rgba(0,0,0,.8);color:#fff;border:1px solid rgba(255,255,255,.2);
@@ -143,32 +128,33 @@
     @keyframes st {to{opacity:1;transform:none}}
     @keyframes revealY {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+    /* ====== MOBILE ONLY (quirúrgico) ====== */
     @media (max-width:900px){
-  /* HEADER: que quepa todo y no se solape */
-  .header{flex-wrap:wrap; gap:8px; align-items:flex-start;}
-  .brand{font-size:30px; white-space:normal; line-height:1.1;} /* antes: 36px + nowrap */
-  .subnav{margin-top:4px;}
-  .right{width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px;}
-  .motto{font-size:11px; max-width:70%;}
-  .btn{padding:8px 12px;}
+      /* 1) Permitir scroll en home móvil */
+      body:not(.panel-open):not(.epk-open){overflow:auto;}
 
-  /* HERO: sin cortes ni solapes con header */
-  .headline{font-size:18px; word-spacing:6px; line-height:1.22;}
-  .hero{
-    overflow:visible;
-    min-height:auto;        /* quita el calc en móvil */
-    padding-top:64px;       /* aire bajo el header (sube desde 56 a 64) */
-  }
-  .hero-inner{
-    padding:0 var(--panel-pad) calc(36px + env(safe-area-inset-bottom)); /* +4px de aire abajo */
-  }
+      /* HEADER */
+      .header{flex-wrap:wrap; gap:10px; align-items:flex-start;}
+      .brand{font-size:30px; white-space:normal; line-height:1.1;}
+      .subnav{margin-top:4px;}
 
-  /* EPK: sin recortes */
-  .epk .media{grid-template-columns:1fr;}
-  .epk .photo .ph{height:auto;}
-  .epk .photo img{width:100%; height:auto;}
-  .epk .media iframe{max-width:100%;}
-}
+      /* Reubicar tagline + botón debajo del brand */
+      .right{width:100%; display:flex; flex-direction:column; align-items:flex-start; gap:10px;}
+      .motto{font-size:11px; max-width:100%; text-align:left;}
+      .btn{padding:8px 12px;}
+
+      /* HERO */
+      .headline{font-size:18px; word-spacing:6px; line-height:1.22;}
+      .hero{ overflow:visible; min-height:auto; padding-top:64px; }
+      .hero-inner{ padding:0 var(--panel-pad) calc(36px + env(safe-area-inset-bottom)); }
+
+      /* EPK: 1 columna + medios fluidos */
+      .epk .media{ grid-template-columns:1fr; grid-template-rows:auto; }
+      .epk .media > *{ min-width:0; } /* evita overflow por iframes */
+      .epk .photo .ph{height:auto;}
+      .epk .photo img{width:100%; height:auto;}
+      .epk .media iframe{width:100%; height:240px; display:block; border:0;}
+    }
   </style>
 </head>
 <body>
@@ -199,7 +185,6 @@
       <a href="#" class="back" data-back>←</a>
       <h2>Artists</h2>
       <div class="list" id="artists-list">
-        <!-- Orden alfabético; solo Mike listo -->
         <a href="#" data-artist="david-meyer" aria-disabled="true" data-soon="true">David Meyer</a>
         <a href="#" data-artist="ludviq" aria-disabled="true" data-soon="true">Ludviq</a>
         <a href="#" data-artist="mike-sacchetti" data-ready="true">Mike Sacchetti</a>
@@ -297,19 +282,21 @@
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">EPK coming soon</div>
 
   <script>
-    // Brand hover animation per letter with preserved SPACE between words
+    // Brand per-letter + salto a 2 líneas en móvil
     (function(){
       const el = document.getElementById('brand');
       if(!el) return;
-      const text = 'GHOSTING CORP. AGENCY';
+      const isMobile = matchMedia('(max-width:900px)').matches;
+      const text = isMobile ? 'GHOSTING CORP.\n AGENCY' : 'GHOSTING CORP. AGENCY';
       el.textContent = '';
       for(const ch of text){
+        if(ch === '\n'){ el.appendChild(document.createElement('br')); continue; }
         if(ch === ' '){ el.appendChild(document.createTextNode(' ')); continue; }
         const s = document.createElement('span');
         s.textContent = ch;
         el.appendChild(s);
       }
-      // clicking brand returns home
+      // click brand → home
       el.addEventListener('click',(e)=>{ 
         e.preventDefault(); 
         document.body.classList.remove('panel-open','epk-open'); 
@@ -318,7 +305,7 @@
       });
     })();
 
-    // Word-level stagger for the bottom headline + hover activation
+    // Word-level stagger + hover
     (function(){
       const h = document.getElementById('h1');
       const band = document.querySelector('.hero-inner');
@@ -337,7 +324,7 @@
       band.addEventListener('mouseleave',()=>band.classList.remove('active'));
     })();
 
-    // Panels logic (Artists/Label/Contact) + color invert + history
+    // Panels logic + history
     (function(){
       const body = document.body;
       const subnav = document.querySelector('.subnav');
@@ -369,7 +356,6 @@
       document.querySelectorAll('[data-back]').forEach(el=>{ el.addEventListener('click',(ev)=>{ ev.preventDefault(); closePanel(); }); });
     })();
 
-    // Toast helper (B)
     function showToast(msg='EPK coming soon'){
       const t = document.getElementById('toast');
       if(!t) return;
@@ -379,7 +365,7 @@
       t.__timer = setTimeout(()=>t.classList.remove('show'), 1800);
     }
 
-    // EPK overlay wiring
+    // EPK overlay
     ;(function(){
       const epk = document.getElementById('epk');
       const closeBtn = document.getElementById('epk-close');
@@ -392,7 +378,6 @@
       const socialsUl = document.getElementById('epk-socials');
 
       const data = {
-        // Solo Mike con EPK real
         'mike-sacchetti': {
           name: 'Mike Sacchetti',
           tagline: 'Proto House / Italo / Wave / Electro',
@@ -438,7 +423,6 @@
         const d = data[key];
         if(!d) return;
 
-        // Reset placeholders antes de rellenar (evita heredar de otro artista)
         resetEpkToPlaceholders();
 
         document.body.classList.add('epk-open');
@@ -453,7 +437,6 @@
           else { li.textContent = r; }
           riders.appendChild(li);
         });
-        // Media + socials
         try{
           if (d.video) {
             document.getElementById('epk-video').innerHTML =
@@ -496,7 +479,6 @@
         const isReady = a.hasAttribute('data-ready');
         const key = a.getAttribute('data-artist');
 
-        // A) Deshabilitar + B) Toast
         if(!isReady){
           showToast('EPK coming soon');
           return;
@@ -517,38 +499,32 @@
       });
     })();
    
-  // --- Route bootstrap: abre panel/EPK según la URL al cargar ---
-(function(){
-  var path = location.pathname || '/';
+    // --- Route bootstrap (deep links) ---
+    (function(){
+      var path = location.pathname || '/';
 
-  // si llega /artists/slug → abre panel Artists y luego el EPK
-  var m = path.match(/^\/artists\/([\w-]+)\/?$/);
-  if(m){
-    var slug = m[1];
-    window.addEventListener('load', function(){
-      // 1) abre el panel de Artists (usa tu mismo flujo de navegación)
-      var navArtists = document.querySelector('.subnav a[data-route="artists"]');
-      if(navArtists) navArtists.click();
+      var m = path.match(/^\/artists\/([\w-]+)\/?$/);
+      if(m){
+        var slug = m[1];
+        window.addEventListener('load', function(){
+          var navArtists = document.querySelector('.subnav a[data-route="artists"]');
+          if(navArtists) navArtists.click();
+          setTimeout(function(){
+            var link = document.querySelector('[data-artist="'+slug+'"][data-ready]');
+            if(link){ link.click(); }
+          }, 60);
+        });
+        return;
+      }
 
-      // 2) tras un tick, simula click en el artista listo
-      setTimeout(function(){
-        var link = document.querySelector('[data-artist="'+slug+'"][data-ready]');
-        if(link){ link.click(); }
-      }, 60);
-    });
-    return;
-  }
-
-  // si llega /artists o /label o /contact → abre ese panel
-  var p = path.match(/^\/(artists|label|contact)\/?$/);
-  if(p){
-    window.addEventListener('load', function(){
-      var a = document.querySelector('.subnav a[data-route="'+p[1]+'"]');
-      if(a) a.click();
-    });
-  }
-})();
-
-</script>
+      var p = path.match(/^\/(artists|label|contact)\/?$/);
+      if(p){
+        window.addEventListener('load', function(){
+          var a = document.querySelector('.subnav a[data-route="'+p[1]+'"]');
+          if(a) a.click();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
